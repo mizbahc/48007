@@ -1,5 +1,5 @@
 from flask_cors import CORS
-from flask import Flask, render_template, request, send_from_directory, send_file
+from flask import Flask, render_template, request, send_from_directory, send_file, redirect, url_for
 import torch 
 import numpy as np
 from PIL import Image
@@ -20,7 +20,17 @@ def home():
 
 
 @app.route('/video_stream', methods=['POST'], strict_slashes=False)
-def video_stream():
+def stream():
+    file = request.files['image']
+    data = Image.open(file.stream)
+
+    result = model(data)
+ 
+    return "xxx"
+
+
+@app.route('/get_people', methods=['POST'], strict_slashes=False)
+def postPeople():
     file = request.files['image']
     data = Image.open(file.stream)
 
@@ -38,10 +48,17 @@ def video_stream():
       if predictionKeys[i] == 0:
         personCounter += 1
     
-    result.show()
-    print("There are", personCounter, "person(s).")   
+    print("There are", personCounter, "person(s).")
 
-    return f"{personCounter}"
+    return redirect(url_for("getPeople", numberOfPeople=personCounter))
+
+
+@app.route('/get_people', methods=['GET'], strict_slashes=False)
+def getPeople():
+  if request.args:
+    numberOfPeople = request.args['numberOfPeople']
+    return render_template("people.html", numberOfPeople=numberOfPeople)
+  return render_template("people.html")
 
 
 @app.route('/tiny_stream', methods=['POST'], strict_slashes=False)
