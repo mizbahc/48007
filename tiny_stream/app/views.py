@@ -25,8 +25,8 @@ def stream():
     data = Image.open(file.stream)
 
     result = model(data)
- 
-    return "xxx"
+    result.show()
+    return redirect(url_for("stream", image=result))
 
 
 @app.route('/get_people', methods=['POST'], strict_slashes=False)
@@ -51,6 +51,15 @@ def postPeople():
     print("There are", personCounter, "person(s).")
 
     return redirect(url_for("getPeople", numberOfPeople=personCounter))
+
+
+
+@app.route('/video_stream', methods=['GET'], strict_slashes=False)
+def stream():
+    if request.args:
+      image = request.args['image']
+      return render_template("index.html", image=image)
+    return render_template("index.html")
 
 
 @app.route('/get_people', methods=['GET'], strict_slashes=False)
