@@ -84,7 +84,7 @@ def tiny():
     for key, value in detected_objects.items():
       print(int(key)+1, "Object type:" ,"\"", value["object_type"] , "\"", "Bounding box:", value["bounding_box"])
     print("--------FRAME END--------")
-    return res
+    return render_template("people.html", numberOfPeople=number_of_person)
 
     
     
