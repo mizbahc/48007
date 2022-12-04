@@ -6,7 +6,7 @@ from PIL import Image
 import requests
 import json
 
-# Opencv DNN
+# TinyYOLO
 net = cv2.dnn.readNet("dnn_model/yolov4-tiny.weights", "dnn_model/yolov4-tiny.cfg")
 model = cv2.dnn_DetectionModel(net)
 model.setInputParams(size=(320, 320), scale=1/255)
@@ -19,17 +19,17 @@ with open("dnn_model/classes.txt", "r") as file_object:
 
 
 #Setup the camera
-# picam2 = Picamera2()
-# preview_config = picam2.create_preview_configuration(main={"size": (800, 600)})
-# picam2.configure(preview_config)
-# picam2.start_preview(Preview.QTGL)
-# picam2.start()
-# time.sleep(2)
+picam2 = Picamera2()
+preview_config = picam2.create_preview_configuration(main={"size": (800, 600)})
+picam2.configure(preview_config)
+picam2.start_preview(Preview.QTGL)
+picam2.start()
+time.sleep(2)
 ip = "10.147.20.153"
 
 #Detect and post the detected
 while True:
-    # metadata = picam2.capture_file("frame.jpg")
+    metadata = picam2.capture_file("frame.jpg")
     time.sleep(0.2)
     frame = cv2.imread('frame.jpeg')
     (obj_id, scr, bx) = model.detect(frame, confThreshold=0.3, nmsThreshold=.4)
